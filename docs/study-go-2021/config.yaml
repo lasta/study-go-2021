@@ -1,0 +1,39 @@
+baseURL: 'http://lasta.github.io/study-go-2021/'
+languageCode: ja-jp
+title: Study Go language (2021)
+theme: hugo-geekdoc
+publishdir: ../publishdir/
+hasCJKLanguage: true
+useHLJS: true
+refLinksErrorLevel: WARNING
+
+############################################################
+# https://geekdocs.de/usage/getting-started/
+############################################################
+pluralizeListTitles: false
+
+# Geekdoc required configuration
+pygmentsCodeFences: true
+pygmentsUseClasses: true
+disablePathToLower: true
+enableGitInfo: true
+
+minify:
+  disableHTML: true
+
+# Needed for mermaid shortcodes
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 1
+    endLevel: 9
+  highlight:
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    tabWidth: 4
