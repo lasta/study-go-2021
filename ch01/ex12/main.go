@@ -78,8 +78,7 @@ func lissajous(out io.Writer, params url.Values) {
 	cycles := defaultCycles
 	if len(params["cycles"]) > 0 {
 		var err error
-		cycles, err = strconv.Atoi(params["cycles"][0])
-		if err != nil {
+		if cycles, err = strconv.Atoi(params["cycles"][0]); err != nil {
 			fmt.Fprintf(out, "failed to parse cycle: %v", params["cycles"][0])
 			return
 		}
@@ -88,8 +87,7 @@ func lissajous(out io.Writer, params url.Values) {
 	nframes := defaultNframes
 	if len(params["nframes"]) > 0 {
 		var err error
-		nframes, err = strconv.Atoi(params["nframes"][0])
-		if err != nil {
+		if nframes, err = strconv.Atoi(params["nframes"][0]); err != nil {
 			fmt.Fprintf(out, "failed to parse cycle: %v", params["nframes"][0])
 			return
 		}
@@ -98,8 +96,7 @@ func lissajous(out io.Writer, params url.Values) {
 	delay := defaultDelay
 	if len(params["delay"]) > 0 {
 		var err error
-		delay, err = strconv.Atoi(params["delay"][0])
-		if err != nil {
+		if delay, err = strconv.Atoi(params["delay"][0]); err != nil {
 			fmt.Fprintf(out, "failed to parse cycle: %v", params["delay"][0])
 			return
 		}
