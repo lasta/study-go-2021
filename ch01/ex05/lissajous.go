@@ -26,8 +26,8 @@ var palette = []color.Color{
 }
 
 const (
-	whiteIndex = 0 // 1st color in `palette`
-	blackIndex = 1 // 2nd color in `palette`
+	blackIndex = 0 // 1st color in `palette`
+	greenIndex = 1 // 2nd color in `palette`
 )
 
 func main() {
@@ -56,7 +56,7 @@ func lissajous(out io.Writer) {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
 
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blackIndex)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), greenIndex)
 		}
 
 		phase += 0.1
