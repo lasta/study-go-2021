@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/study-go-2021/ch02/ex01/tempconv"
-	"github.com/study-go-2021/ch02/ex02/astronomicalunit"
 	"bufio"
 	"fmt"
+	"me.lasta/study-go-2021/ch02/ex01/tempconv"
+	"me.lasta/study-go-2021/ch02/ex02/astronomicalunit"
 	"os"
 	"strconv"
 )
