@@ -39,7 +39,7 @@ func convert(input string) {
 		return
 	}
 
-	fmt.Printf("---------- input: %s ----------", value)
+	fmt.Printf("---------- input: %g ----------", value)
 	fmt.Printf("%s = %s\n", input, tempconv.KToC(tempconv.Kelvin(value)))
 	fmt.Printf("%s = %s\n", input, tempconv.FToC(tempconv.Fahrenheit(value)))
 	fmt.Printf("%s = %s\n", input, tempconv.CToF(tempconv.Celsius(value)))
