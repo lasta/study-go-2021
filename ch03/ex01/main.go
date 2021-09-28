@@ -30,7 +30,7 @@ func main() {
 			cx, cy := corner(i, j+1)
 			dx, dy := corner(i+1, j+1)
 
-			if any([]bool{
+			if Any([]bool{
 				math.IsNaN(ax), math.IsNaN(ay),
 				math.IsNaN(bx), math.IsNaN(by),
 				math.IsNaN(cx), math.IsNaN(cy),
@@ -62,7 +62,7 @@ func f(x float64, y float64) float64 {
 	return math.Sin(r) / r
 }
 
-func any(values []bool) bool {
+func Any(values []bool) bool {
 	for _, value := range values {
 		if value {
 			return true
