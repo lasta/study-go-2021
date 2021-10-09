@@ -48,29 +48,26 @@ func main() {
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
-func parseRequestParameters(params url.Values) DrawingParameter {
-	var err error
-	var width int
-	var height int
-	var peakColor color.RGBA
-	var valleyColor color.RGBA
-
-	if width, err = strconv.Atoi(params.Get("width")); err != nil {
-		width = defaultWidth
-	}
-	if height, err = strconv.Atoi(params.Get("height")); err != nil {
-		height = defaultHeight
+func parseRequestParameters(urlParams url.Values) (params DrawingParameter) {
+	params = DrawingParameter{
+		height:      defaultHeight,
+		width:       defaultWidth,
+		peakColor:   color.RGBA{},
+		valleyColor: color.RGBA{},
 	}
 
-	peakColor = selectColor(params.Get("peak-color"))
-	valleyColor = selectColor(params.Get("valley-color"))
-
-	return DrawingParameter{
-		height:      height,
-		width:       width,
-		peakColor:   peakColor,
-		valleyColor: valleyColor,
+	if width, err := strconv.Atoi(urlParams.Get("width")); err == nil {
+		params.width = width
 	}
+
+	if height, err := strconv.Atoi(urlParams.Get("height")); err == nil {
+		params.height = height
+	}
+
+	params.peakColor = selectColor(urlParams.Get("peak-color"))
+	params.valleyColor = selectColor(urlParams.Get("valley-color"))
+
+	return params
 }
 
 func selectColor(colorName string) color.RGBA {
