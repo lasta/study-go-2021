@@ -27,8 +27,8 @@ func main() {
 		}
 	}
 
-	writeImage("mandelbrot.png", img)
-	writeImage("supersampled.png", supersample(img))
+	writeImage("original.png", img)
+	writeImage("antialiasing.png", antialias(img))
 }
 
 func writeImage(fileName string, img image.Image) {
@@ -64,8 +64,7 @@ func mandelbrot(z complex128) color.Color {
 	return color.Black
 }
 
-// cf: assets/fig.png
-func supersample(original image.Image) image.Image {
+func antialias(original image.Image) image.Image {
 	bound := original.Bounds()
 	width := bound.Size().X
 	height := bound.Size().Y
