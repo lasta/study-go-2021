@@ -20,6 +20,22 @@ type DrawingParameter struct {
 	antialiasing bool
 }
 
+// NinePixel pixels around E
+// a b c
+// d e f
+// g h i
+type NinePixel struct {
+	a color.Color
+	b color.Color
+	c color.Color
+	d color.Color
+	e color.Color
+	f color.Color
+	g color.Color
+	h color.Color
+	i color.Color
+}
+
 func main() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		if err := request.ParseForm(); err != nil {
@@ -62,7 +78,7 @@ func parseRequestParameters(urlParams url.Values) (params DrawingParameter) {
 func draw(writer io.Writer, params DrawingParameter) error {
 	const (
 		xmin1x, xmax1x, ymin1x, ymax1x = -2, 2, -2, 2
-		width, height = 1024, 1024
+		width, height                  = 1024, 1024
 	)
 	xmin := xmin1x / params.zoom
 	xmax := xmax1x / params.zoom
@@ -126,56 +142,142 @@ func fractal(z complex128) color.Color {
 	return color.Black
 }
 
-func antialias(original image.Image) image.Image {
-	bound := original.Bounds()
+func antialias(origin image.Image) image.Image {
+	bound := origin.Bounds()
 	width := bound.Size().X
 	height := bound.Size().Y
 
 	dest := image.NewRGBA(bound)
 
-	for x := 0; x < width-1; x++ {
-		for y := 0; y < height-1; y++ {
-			// A B C
-			// D E F
-			// G H I
-			rgbaA := original.At(x, y)
-			rgbaB := original.At(x, y)
-			rgbaC := original.At(x+1, y)
-			rgbaD := original.At(x, y)
-			rgbaE := original.At(x, y)
-			rgbaF := original.At(x+1, y)
-			rgbaG := original.At(x, y+1)
-			rgbaH := original.At(x, y+1)
-			rgbaI := original.At(x+1, y+1)
-
-			if x > 0 && y > 0 {
-				rgbaA = original.At(x-1, y-1)
-			}
-			if x > 0 {
-				rgbaD = original.At(x-1, y)
-				rgbaG = original.At(x-1, y+1)
-			}
-			if y > 0 {
-				rgbaB = original.At(x, y-1)
-				rgbaC = original.At(x+1, y-1)
-			}
+	for x := 0; x < width; x++ {
+		for y := 0; y < height; y++ {
+			cropped := crop(&origin, x, y)
 
 			// split pixel E into 4 pixels
-			// A  | B       | C
+			// a  | b       | c
 			// ---+---------+---
-			// D  | E00 E01 | F
+			// d  | E00 E01 | f
 			//    | E10 E11 |
 			// ---+---------+---
-			// G  | H       | I
-			rgbaE00 := average(rgbaA, rgbaB, rgbaD, rgbaE)
-			rgbaE01 := average(rgbaB, rgbaC, rgbaE, rgbaF)
-			rgbaE10 := average(rgbaD, rgbaE, rgbaG, rgbaH)
-			rgbaE11 := average(rgbaE, rgbaF, rgbaH, rgbaI)
+			// g  | h       | i
+			rgbaE00 := average(cropped.a, cropped.b, cropped.d, cropped.e)
+			rgbaE01 := average(cropped.b, cropped.c, cropped.e, cropped.f)
+			rgbaE10 := average(cropped.d, cropped.e, cropped.g, cropped.h)
+			rgbaE11 := average(cropped.e, cropped.f, cropped.h, cropped.i)
 
 			dest.Set(x, y, average(rgbaE00, rgbaE01, rgbaE10, rgbaE11))
 		}
 	}
 	return dest
+}
+
+// crop image around x, y (point E)
+//
+// a b c
+// d e f
+// g h i
+func crop(origin *image.Image, x int, y int) (subImage NinePixel) {
+	subImage = NinePixel{
+		a: (*origin).At(x-1, y-1),
+		b: (*origin).At(x, y-1),
+		c: (*origin).At(x+1, y-1),
+		d: (*origin).At(x-1, y),
+		e: (*origin).At(x, y),
+		f: (*origin).At(x+1, y),
+		g: (*origin).At(x-1, y+1),
+		h: (*origin).At(x, y+1),
+		i: (*origin).At(x+1, y+1),
+	}
+	bound := (*origin).Bounds()
+	xMax := bound.Max.X - 1
+	yMax := bound.Max.Y - 1
+
+	// upper-left corner
+	// x: unavailable pixel, o: available pixel
+	// xxx
+	// xoo
+	// xoo
+	if x == 0 && y == 0 {
+		subImage.a = subImage.e
+		subImage.b = subImage.e
+		subImage.c = subImage.f
+		subImage.d = subImage.e
+		subImage.g = subImage.h
+		return
+	}
+
+	// upper-right corner
+	// xxx
+	// oox
+	// oox
+	if x == xMax && y == 0 {
+		subImage.a = subImage.d
+		subImage.b = subImage.e
+		subImage.c = subImage.e
+		subImage.f = subImage.e
+		subImage.i = subImage.h
+		return
+	}
+
+	// lower-left corner
+	// xoo
+	// xoo
+	// xxx
+	if x == 0 && y == yMax {
+		subImage.a = subImage.b
+		subImage.d = subImage.e
+		subImage.g = subImage.e
+		subImage.h = subImage.e
+		subImage.i = subImage.f
+		return
+	}
+
+	// lower-right corner
+	// oox
+	// oox
+	// xxx
+	if x == xMax && y == yMax {
+		subImage.c = subImage.b
+		subImage.f = subImage.e
+		subImage.g = subImage.d
+		subImage.h = subImage.e
+		subImage.i = subImage.e
+		return
+	}
+
+	// not corner but left-bound
+	if x == 0 {
+		subImage.a = subImage.b
+		subImage.d = subImage.e
+		subImage.g = subImage.h
+		return
+	}
+
+	// not corner but right-bound
+	if x == xMax {
+		subImage.c = subImage.b
+		subImage.f = subImage.e
+		subImage.i = subImage.h
+	}
+
+	// not corner but upper-bound
+	if y == 0 {
+		subImage.a = subImage.d
+		subImage.b = subImage.e
+		subImage.c = subImage.f
+		return
+	}
+
+	// not corner but lower-bound
+	if y == yMax {
+		subImage.g = subImage.d
+		subImage.h = subImage.e
+		subImage.i = subImage.f
+		return
+	}
+
+	// inner
+	return
 }
 
 func average(pixels ...color.Color) color.Color {
