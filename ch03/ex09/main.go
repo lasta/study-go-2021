@@ -20,11 +20,11 @@ type DrawingParameter struct {
 	antialiasing bool
 }
 
-// NinePixel pixels around E
+// Lattice pixels around E
 // a b c
 // d e f
 // g h i
-type NinePixel struct {
+type Lattice struct {
 	a color.Color
 	b color.Color
 	c color.Color
@@ -176,8 +176,8 @@ func antialias(origin image.Image) image.Image {
 // a b c
 // d e f
 // g h i
-func crop(origin *image.Image, x int, y int) (subImage NinePixel) {
-	subImage = NinePixel{
+func crop(origin *image.Image, x int, y int) (subImage Lattice) {
+	subImage = Lattice{
 		a: (*origin).At(x-1, y-1),
 		b: (*origin).At(x, y-1),
 		c: (*origin).At(x+1, y-1),
