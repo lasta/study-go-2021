@@ -13,7 +13,7 @@ func Test_isAnagram(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "when given empty strings then returns false",
+			name: "when given empty strings then returns true",
 			args: args{},
 			want: true,
 		},
