@@ -3,14 +3,13 @@ package ex12
 import "sort"
 
 func isAnagram(s1, s2 string) bool {
-	if len(s1) == 0 && len(s2) == 0 {
-		return true
-	}
-	if len(s1) == 0 || len(s2) == 0 {
-		return false
-	}
 	if len(s1) != len(s2) {
 		return false
+	}
+
+	// if len(s1) == 0 then len(s2) must be 0
+	if len(s1) == 0 {
+		return true
 	}
 
 	b1 := []rune(s1)
