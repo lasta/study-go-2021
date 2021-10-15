@@ -1,7 +1,7 @@
 ---
 title: "Day1"
 date: 2021-09-17T09:33:37+09:00
-draft: true
+draft: false
 ---
 
 ## 1日目
