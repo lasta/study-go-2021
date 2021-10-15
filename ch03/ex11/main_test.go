@@ -44,14 +44,29 @@ func Test_comma(t *testing.T) {
 			want: "-123",
 		},
 		{
+			name: "when given plus 3 digits then returns itself",
+			args: "+123",
+			want: "+123",
+		},
+		{
 			name: "when given minus 4 digits then put a comma",
 			args: "-1234",
 			want: "-1,234",
 		},
 		{
+			name: "when given plus 4 digits then put a comma",
+			args: "+1234",
+			want: "+1,234",
+		},
+		{
 			name: "when given minus 6 digits then put a comma",
 			args: "-123456",
 			want: "-123,456",
+		},
+		{
+			name: "when given plus 6 digits then put a comma",
+			args: "+123456",
+			want: "+123,456",
 		},
 		{
 			name: "when given 2 digits has decimal point then returns itself",
@@ -72,6 +87,11 @@ func Test_comma(t *testing.T) {
 			name: "when given number is negative and its integer part has 4 digits then put a comma",
 			args: "-1234.5678",
 			want: "-1,234.5678",
+		},
+		{
+			name: "when given number is positive and its integer part has 4 digits then put a comma",
+			args: "+1234.5678",
+			want: "+1,234.5678",
 		},
 
 	}

@@ -9,9 +9,9 @@ func comma(s string) string {
 	parts := strings.Split(s, ".")
 	integerPart := parts[0]
 
-	isNegative := strings.HasPrefix(s, "-")
+	hasSign := strings.HasPrefix(s, "-") || strings.HasPrefix(s, "+")
 	absIntegerPart := integerPart
-	if isNegative {
+	if hasSign {
 		absIntegerPart = integerPart[1:]
 	}
 
@@ -24,8 +24,8 @@ func comma(s string) string {
 	shifter := n % 3
 
 	// sign
-	if isNegative {
-		buf.WriteString("-")
+	if hasSign {
+		buf.WriteString(string(s[0]))
 	}
 
 	// integer part
