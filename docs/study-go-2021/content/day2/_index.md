@@ -34,3 +34,56 @@ func main() {
 * `big.Rat` は iteration　数を調整しないと全然計算が終わらない
 * `big.Float`, `big.Rat` はメモリを確保する
   * `-benchmem` でメモリ関連情報を取得できる
+
+#### 3.12
+* `string(rune)` は成功するが、 `string(int)` は期待通りの挙動をしない
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Println('a')          // 97
+  fmt.Println(string('a'))       // a
+  fmt.Println(string(rune('a'))) // a
+  fmt.Println(string(97))        // a
+}
+```
+
+## 4章
+### 補填
+* 4.1
+  * 実は `copy(dst []byte, src string) int` ができる
+* slice はもともと pointer なので、 `&slice` のようにわたす旨味はほぼない
+
+* map の繰り返しの順序は定義されていない
+  * バグを見つけやすくするよう、意図的に順序がランダムになるようになっている
+    * 実際には偏りがあるので注意
+  * `fmt` パッケージに渡した場合はソートされるので固定
+
+* map を set として使うこともある
+
+### 練習問題
+* 4.3 〜 4.7 : もとのスライスを書き換えるやつ
+* もとのスライスとの判定
+  * 長さを判定した上で、もとのスライスを subslice すれば良い
+
+#### 4.4
+* 最大公約数 (GCD) を用いると swap が固定サイズ、かつスッキリ実装できる
+
+#### 4.6
+* byte slice だが UTF-8 でエンコードされているものなので、 1 文字 1 byte とは限らない
+  * `utf.Decode` などを用いて何 byte のものか判定しないとならない
+
+#### 4.11
+* sub-command ライブラリ: [cobra](https://github.com/spf13/cobra)
+* CLI : [gocui](https://github.com/jroimartin/gocui)
+
+#### 4.12
+* 2000以上あるので並列実行で取得
+* info API がある
+  * https://xkcd.com/info.0.json
+
+#### 4.13
+* `ioutil.ReadAll` せずに `io.Copy` でファイルに書く
