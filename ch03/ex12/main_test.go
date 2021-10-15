@@ -15,7 +15,7 @@ func Test_isAnagram(t *testing.T) {
 		{
 			name: "when given empty strings then returns false",
 			args: args{},
-			want: false,
+			want: true,
 		},
 		{
 			name: "when either one of strings is empty then returns false",

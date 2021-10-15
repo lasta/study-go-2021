@@ -3,6 +3,9 @@ package ex12
 import "sort"
 
 func isAnagram(s1, s2 string) bool {
+	if len(s1) == 0 && len(s2) == 0 {
+		return true
+	}
 	if len(s1) == 0 || len(s2) == 0 {
 		return false
 	}
