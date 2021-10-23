@@ -59,7 +59,6 @@ func Test_visit(t *testing.T) {
 				"https://www.youtube.com/",
 			},
 		},
-		// TODO: add more cases
 	}
 
 	for _, testCase := range testCases {
