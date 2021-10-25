@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/net/html"
 	"strings"
@@ -9,57 +10,66 @@ import (
 
 func Test_visit(t *testing.T) {
 	testCases := []struct {
-		name string
+		name     string
 		input    string
-		expected []string
+		expected string
 	}{
-		// TODO define test cases
-//		{
-//			name: "空の HTML の場合 nil",
-//			input:    ``,
-//			expected: []string(nil),
-//		},
-//		{
-//			name: "anchor 要素がない場合 nil",
-//			input:    `<html><body></body></html>`,
-//			expected: []string(nil),
-//		},
-//		{
-//			name: "anchor 要素がある場合, URL のリストを生成 (孫なし)",
-//			input: `
-//<html>
-//<body>
-//    <a href="https://golang.org/">Golang</a>
-//    <a href="https://github.com/">GitHub</a>
-//</body>
-//</html>
-//`,
-//			expected: []string{
-//				"https://golang.org/",
-//				"https://github.com/",
-//			},
-//		},
-//		{
-//			name: "anchor 要素がある場合, URL のリストを生成 (孫あり)",
-//			input: `
-//<html>
-//<body>
-//    <div>
-//	    <a href="https://golang.org/">Golang</a>
-//	    <a href="https://github.com/">GitHub</a>
-//        <div>
-//            <a href="https://www.youtube.com/">YouTube</a>
-//        </div>
-//    </div>
-//</body>
-//</html>
-//`,
-//			expected: []string{
-//				"https://golang.org/",
-//				"https://github.com/",
-//				"https://www.youtube.com/",
-//			},
-//		},
+		{
+			name:     "空のHTMLの場合, 空文字",
+			input:    "",
+			expected: "",
+		},
+		{
+			name: "抽出対象の要素を含まない場合, 空文字",
+			input: `
+<html>
+<head><title>Title</title></head>
+<body>
+    <h1>Header 1</h1>
+    <p>Paragraph 1</p>
+</body>
+</html>
+`,
+			expected: "",
+		},
+		{
+			name: "抽出対象のタグを含むが URL 要素がない場合, 空文字",
+			input: `
+
+<html>
+<head><title>Title</title></head>
+<body><a>empty anchor</a></body>
+</html>
+`,
+			expected: "",
+		},
+		{
+			name: "抽出対象のタグを含み, URL 要素がある場合, それを含めて出力",
+			input: `
+<html>
+<head>
+   <link rel="prev" href="prev.html" />
+   <script src="script1.js"></script>
+   <link rel="next" href="next.html" />
+   <script src="script2.js"></script>
+</head>
+<body>
+   <img src="image1.png" alt="image1" />
+   <a href="./a.html">a.html</a>
+   <img src="image2.png" alt="image2" />
+   <a href="./b.html">b.html</a>
+</body>
+</html>
+`,
+			expected: "link    href    prev.html\n" +
+				"script  src     script1.js\n" +
+				"link    href    next.html\n" +
+				"script  src     script2.js\n" +
+				"img     src     image1.png\n" +
+				"a       href    ./a.html\n" +
+				"img     src     image2.png\n" +
+				"a       href    ./b.html\n",
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -68,7 +78,9 @@ func Test_visit(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			actual := visit(nil, doc)
+			var buf bytes.Buffer
+			extractUrl(&buf, doc)
+			actual := buf.String()
 			assert.Equal(t, testCase.expected, actual)
 		})
 	}
