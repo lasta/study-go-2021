@@ -70,7 +70,7 @@ func download(rawURL string) {
 
 	currentDir := "./"  // filepath.Dir(execFilePath)
 	dirPath := filepath.Join(currentDir, parsedURL.Hostname(), filepath.Dir(parsedURL.Path))
-	if err := os.MkdirAll(dirPath, 0777); err != nil {
+	if err := os.MkdirAll(dirPath, 0755); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to create directory: %v\n", err)
 		return
 	}
