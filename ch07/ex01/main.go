@@ -37,7 +37,6 @@ func (c *LineCounter) Write(p []byte) (count int, err error) {
 	return count, nil
 }
 
-
 func main() {
 	var c ByteCounter
 	c.Write([]byte("hello"))

@@ -26,84 +26,84 @@ func TestByteCounter_Write(t *testing.T) {
 }
 
 func TestWordCounter_Write(t *testing.T) {
-	testCases := []struct{
-		name string
-		input string
+	testCases := []struct {
+		name     string
+		input    string
 		expected int
 	}{
 		{
-			name: "空文字の場合, 0",
-			input: "",
+			name:     "空文字の場合, 0",
+			input:    "",
 			expected: 0,
 		},
 		{
-			name: "1文字 ` ` の場合, 0",
-			input: " ",
+			name:     "1文字 ` ` の場合, 0",
+			input:    " ",
 			expected: 0,
 		},
 		{
-			name: "1文字 `a` の場合, 1",
-			input: "a",
+			name:     "1文字 `a` の場合, 1",
+			input:    "a",
 			expected: 1,
 		},
 		{
-			name: "2文字 `  ` の場合, 0",
-			input: "  ",
+			name:     "2文字 `  ` の場合, 0",
+			input:    "  ",
 			expected: 0,
 		},
 		{
-			name: "2文字 `a ` の場合, 1",
-			input: "a ",
+			name:     "2文字 `a ` の場合, 1",
+			input:    "a ",
 			expected: 1,
 		},
 		{
-			name: "2文字 ` b` の場合, 1",
-			input: " b",
+			name:     "2文字 ` b` の場合, 1",
+			input:    " b",
 			expected: 1,
 		},
 		{
-			name: "2文字 `ab` の場合, 1",
-			input: "ab",
+			name:     "2文字 `ab` の場合, 1",
+			input:    "ab",
 			expected: 1,
 		},
 		{
-			name: "3文字 `   ` の場合, 0",
-			input: "   ",
+			name:     "3文字 `   ` の場合, 0",
+			input:    "   ",
 			expected: 0,
 		},
 		{
-			name: "3文字 `a  ` の場合, 1",
-			input: "a  ",
+			name:     "3文字 `a  ` の場合, 1",
+			input:    "a  ",
 			expected: 1,
 		},
 		{
-			name: "3文字 ` b ` の場合, 1",
-			input: " b ",
+			name:     "3文字 ` b ` の場合, 1",
+			input:    " b ",
 			expected: 1,
 		},
 		{
-			name: "3文字 `  c` の場合, 1",
-			input: "  c",
+			name:     "3文字 `  c` の場合, 1",
+			input:    "  c",
 			expected: 1,
 		},
 		{
-			name: "3文字 `ab ` の場合, 1",
-			input: "ab ",
+			name:     "3文字 `ab ` の場合, 1",
+			input:    "ab ",
 			expected: 1,
 		},
 		{
-			name: "3文字 `a c` の場合, 2",
-			input: "a c",
+			name:     "3文字 `a c` の場合, 2",
+			input:    "a c",
 			expected: 2,
 		},
 		{
-			name: "3文字 ` bc` の場合, 1",
-			input: " bc",
+			name:     "3文字 ` bc` の場合, 1",
+			input:    " bc",
 			expected: 1,
 		},
 		{
-			name: "3文字 `abc` の場合, 1",
-			input: "abc",
+			name:     "3文字 `abc` の場合, 1",
+			input:    "abc",
 			expected: 1,
 		},
 	}
@@ -121,84 +121,84 @@ func TestWordCounter_Write(t *testing.T) {
 }
 
 func TestLineCounter_Write(t *testing.T) {
-	testCases := []struct{
-		name string
-		input string
+	testCases := []struct {
+		name     string
+		input    string
 		expected int
 	}{
 		{
-			name: "空文字の場合, 0",
-			input: "",
+			name:     "空文字の場合, 0",
+			input:    "",
 			expected: 0,
 		},
 		{
-			name: "1文字 `\n` の場合, 0",
-			input: "\n",
+			name:     "1文字 `\n` の場合, 0",
+			input:    "\n",
 			expected: 1,
 		},
 		{
-			name: "1文字 `a` の場合, 1",
-			input: "a",
+			name:     "1文字 `a` の場合, 1",
+			input:    "a",
 			expected: 1,
 		},
 		{
-			name: "2文字 `\n\n` の場合, 2",
-			input: "\n\n",
+			name:     "2文字 `\n\n` の場合, 2",
+			input:    "\n\n",
 			expected: 2,
 		},
 		{
-			name: "2文字 `a\n` の場合, 1",
-			input: "a\n",
+			name:     "2文字 `a\n` の場合, 1",
+			input:    "a\n",
 			expected: 1,
 		},
 		{
-			name: "2文字 `\nb` の場合, 2",
-			input: "\nb",
+			name:     "2文字 `\nb` の場合, 2",
+			input:    "\nb",
 			expected: 2,
 		},
 		{
-			name: "2文字 `ab` の場合, 1",
-			input: "ab",
+			name:     "2文字 `ab` の場合, 1",
+			input:    "ab",
 			expected: 1,
 		},
 		{
-			name: "3文字 `\n\n\n` の場合, 3",
-			input: "\n\n\n",
+			name:     "3文字 `\n\n\n` の場合, 3",
+			input:    "\n\n\n",
 			expected: 3,
 		},
 		{
-			name: "3文字 `a\n\n` の場合, 2",
-			input: "a\n\n",
+			name:     "3文字 `a\n\n` の場合, 2",
+			input:    "a\n\n",
 			expected: 2,
 		},
 		{
-			name: "3文字 `\nb\n` の場合, 2",
-			input: "\nb\n",
+			name:     "3文字 `\nb\n` の場合, 2",
+			input:    "\nb\n",
 			expected: 2,
 		},
 		{
-			name: "3文字 `\n\nc` の場合, 3",
-			input: "\n\nc",
+			name:     "3文字 `\n\nc` の場合, 3",
+			input:    "\n\nc",
 			expected: 3,
 		},
 		{
-			name: "3文字 `ab\n` の場合, 1",
-			input: "ab\n",
+			name:     "3文字 `ab\n` の場合, 1",
+			input:    "ab\n",
 			expected: 1,
 		},
 		{
-			name: "3文字 `a\nc` の場合, 2",
-			input: "a\nc",
+			name:     "3文字 `a\nc` の場合, 2",
+			input:    "a\nc",
 			expected: 2,
 		},
 		{
-			name: "3文字 `\nbc` の場合, 2",
-			input: "\nbc",
+			name:     "3文字 `\nbc` の場合, 2",
+			input:    "\nbc",
 			expected: 2,
 		},
 		{
-			name: "3文字 `abc` の場合, 1",
-			input: "abc",
+			name:     "3文字 `abc` の場合, 1",
+			input:    "abc",
 			expected: 1,
 		},
 	}
